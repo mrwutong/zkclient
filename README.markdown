@@ -1,41 +1,27 @@
-ZkClient: a zookeeper client, that makes life a little easier. 
+ZkClient: a zookeeper client, that makes life a little easier.
 =====
 
-+ Website: 			https://github.com/sgroschupf/zkclient
-+ Apache 2.0 License
-
-==> see [CHANGELOG][] for recent work
-
++ 关于原版README: 请参照[README.ORIGIN][]
++ 感谢Jimmy.Yang的分享，来自链接[dubbox升级spring到4.x及添加log4j2支持](http://www.cnblogs.com/yjmyzz/p/update-dubbo-to-spring-4-and-add-log4j2-support.html)
++ 改版README的目的是想把发布的过程记录一下
 
 Build ZkClient from sources:
 ---------------
 
-+ git clone https://github.com/sgroschupf/zkclient.git
-+ ./gradlew test _(run the test suite)_
-+ ./gradlew jars _(build the jars)_
-+ (see available build targets by executing './gradlew tasks' )
++ 安装groovy及gradle
++ git clone https://github.com/mrwutong/zkclient.git
++ 因oschina的repository有时无法访问，编译时一直停止在:compile阶段
++ 注释掉`build.gradle`的23~26行（我已经注释），知道就好
++ 进行编译`gradle jar`（不是官方的`./gradlew jars`），我的系统是MACOS
 
-
-Howto release ZkClient as maven artifact
+Howto release ZkClient as local repository
 ---------------
-- sonatype repository is already configured: https://issues.sonatype.org/browse/OSSRH-4783
-- generate gpg key and publish it to _hkp://pool.sks-keyservers.net_ (https://docs.sonatype.org/display/Repository/How+To+Generate+PGP+Signatures+With+Maven may be of help)
-- tell gradle about the gpg key and sonatype credentials, e.g. through ~/.gradle/gradle.properties: 
-  - sonatypeUsername=$yourSonatypeUser
-  - sonatypePassword=$yourSonatypePassword
-  - signing.keyId=$yourKeyId
-  - signing.password=$yourKeyPassphrase
-  - signing.secretKeyRingFile=/Users/$username/.gnupg/secring.gpg
-- set version in build.gradle to the release version (e.g. 0.5-dev to 0.5) and commit    
-- upload the signed artifacts to the Sonatype repository
-  - _gradle clean uploadArchives_  
-- go to https://oss.sonatype.org/index.html#stagingRepositories and close the repository 
-- check the artifacts and if everything is ok, release the repository (on the same page)
-- syncing to central maven repository will then be activated (might take around 2h)
-- tag with 
-  - _git tag -a $releaseVersion -m "Tag for $releaseVersion release"_
-  - _git push --tags_
-- set version in build.gradle to the next dev version (e.g 0.5 to 0.6-dev) and commit
 
++ 将上步编译好的jar包`zkclient-0.8.1.jar`找到，一般路径为`<工程>/build/libs/zkclient-0.8.1.jar`
++ 运行maven命令安装到本地repository（如想发布至私服上请自己搜一下网上很多）
 
-[CHANGELOG]: ./CHANGELOG.markdown
+```shell
+mvn install:install-file -Dfile=<zkclient工程路径>/build/libs/zkclient-0.8.1.jar -DgroupId=com.101tec -DartifactId=zkclient -Dversion=0.8.1 -Dpackaging=jar
+```
+
+*注* 请将上面<zkclient工程路径>替换为你的路径
